@@ -1,0 +1,9 @@
+{
+  "platforms": ["ios", "android"],
+  "ios": {
+    "modules": ["ExpoBanubaModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.banuba.ExpoBanubaModule"]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "expo-banuba-example",
+    "slug": "expo-banuba-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "expo.modules.banuba.example"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "expo.modules.banuba.example"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-banuba",
+        {
+          "assetsPath": "./banuba-assets"
+        }
+      ]
+    ],
+    "expo": {
+      "autolinking": {
+        "nativeModulesDir": "../"
+      }
+    }
+  }
+}
