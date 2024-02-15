@@ -217,15 +217,25 @@ function addBanubaImplements(src: string): MergeResults {
   });
 }
 
-const banubaPlugin = `
-apply plugin: "org.jetbrains.kotlin.plugin.parcelize"
+const banubaPluginKotlinParcelize = `
+  apply plugin: "org.jetbrains.kotlin.plugin.parcelize"
 `;
 
-function addBanubaPlugin(src: string): MergeResults {
+const banubaPluginKotlinAndroid = `
+  apply plugin: "org.jetbrains.kotlin.android"
+  apply plugin: "org.jetbrains.kotlin.plugin.parcelize"
+`;
+
+function addBanubaPlugins(
+  src: string,
+  includesKotlinAndroid = false,
+): MergeResults {
   return appendContents({
     tag: "expo-banuba-plugin",
     src,
-    newSrc: banubaPlugin,
+    newSrc: includesKotlinAndroid
+      ? banubaPluginKotlinParcelize
+      : banubaPluginKotlinAndroid,
     comment: "//",
   });
 }
@@ -241,8 +251,9 @@ const withBanubaAndroidAppGradle: ConfigPlugin = (config): ExpoConfig => {
           "org.jetbrains.kotlin.plugin.parcelize",
         )
       ) {
-        config.modResults.contents = addBanubaPlugin(
+        config.modResults.contents = addBanubaPlugins(
           config.modResults.contents,
+          config.modResults.contents.includes("org.jetbrains.kotlin.android"),
         ).contents;
       }
     } else {
@@ -260,7 +271,7 @@ const withBanubaAndroidManifest: ConfigPlugin = (config): ExpoConfig => {
       config.modResults,
     );
 
-    app.$["xmlns:tools"] = " ";
+    app.$["xmlns:tools"] = "http://schemas.android.com/tools";
 
     const hasVideoCreationActivity = app.activity?.find(
       (activity) =>
