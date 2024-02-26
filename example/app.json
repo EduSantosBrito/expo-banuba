@@ -2,7 +2,6 @@
   "expo": {
     "name": "expo-banuba-example",
     "slug": "expo-banuba-example",
-    "owner": "connyct",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -53,11 +52,6 @@
           }
         }
       ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "a7032479-833d-4648-9f4c-6e6e45aed566"
-      }
-    }
+    ]
   }
 }
