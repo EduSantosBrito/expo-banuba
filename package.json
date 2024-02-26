@@ -1,6 +1,6 @@
 {
   "name": "expo-banuba",
-  "version": "0.0.3",
+  "version": "0.0.4-testing-1708982888.0",
   "description": "Banuba integration for expo",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -13,7 +13,12 @@
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "open -a \"Xcode\" example/ios",
-    "open:android": "open -a \"Android Studio\" example/android"
+    "open:android": "open -a \"Android Studio\" example/android",
+    "change-test-version": "npm --no-git-tag-version version $(semver $npm_package_version -i prerelease --preid testing-$(date +%s))",
+    "publish-test-version": "pnpm change-test-version && npm publish --no-git-checks --tag=testing",
+    "bump-patch-version": "npm version patch && git push && git push --tags",
+    "bump-minor-version": "npm version minor && git push && git push --tags",
+    "bump-major-version": "npm version major && git push && git push --tags"
   },
   "keywords": [
     "react-native",
@@ -28,11 +33,11 @@
   "author": "EduSantosBrito <edu.santos.brito@gmail.com> (https://github.com/EduSantosBrito)",
   "license": "MIT",
   "homepage": "https://github.com/EduSantosBrito/expo-banuba#readme",
-  "dependencies": {},
   "devDependencies": {
     "@types/react": "^18.0.25",
     "expo-module-scripts": "^3.4.0",
-    "expo-modules-core": "^1.11.2"
+    "expo-modules-core": "^1.11.2",
+    "semver": "^7.6.0"
   },
   "peerDependencies": {
     "expo": "*",
