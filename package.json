@@ -1,6 +1,6 @@
 {
   "name": "expo-banuba",
-  "version": "0.0.4-testing-1708982888.0",
+  "version": "0.1.0",
   "description": "Banuba integration for expo",
   "main": "build/index.js",
   "types": "build/index.d.ts",
