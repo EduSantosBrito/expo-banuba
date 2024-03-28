@@ -109,6 +109,7 @@ extension ExpoBanubaDelegate {
     let manager = FileManager.default
     let exportedVideoFileName = "tmp.mov"
     let videoURL = manager.temporaryDirectory.appendingPathComponent(exportedVideoFileName)
+
     if manager.fileExists(atPath: videoURL.path) {
       try? manager.removeItem(at: videoURL)
     }
@@ -131,11 +132,35 @@ extension ExpoBanubaDelegate {
               videoEditor.clearSessionData()
             }
             if error == nil {
-              self?.inputPromise?.resolve(videoURL.path)
+              let exportedVideo: ExportedVideo = ExportedVideo(video: videoURL.path, thumbnail: exportCoverImages?.gifFileUrl?.absoluteString)
+              self?.inputPromise?.resolve(exportedVideo.toJSONString())
             }
           }
         }
     })
   }
-  
+}
+
+struct ExportedVideo {
+    var video: String;
+    var thumbnail: String?;
+    
+    
+    func toJSONString() -> String? {
+        var dict: [String: Any] = ["video": video]
+        if let thumbnail = thumbnail {
+            dict["thumbnail"] = thumbnail
+        }
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: dict, options: [])
+            if let jsonString = String(data: jsonData, encoding: .utf8) {
+                return jsonString
+            }
+        } catch {
+            print("Error converting to JSON: \(error)")
+        }
+        
+        return nil
+    }
 }
