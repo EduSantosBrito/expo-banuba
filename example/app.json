@@ -34,7 +34,7 @@
     },
     "plugins": [
       [
-        "expo-banuba",
+        "../app.plugin.js",
         {
           "android": {
             "assetsPath": "./banuba-assets-android"

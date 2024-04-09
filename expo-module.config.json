@@ -1,7 +1,8 @@
 {
   "platforms": ["ios", "android"],
   "ios": {
-    "modules": ["ExpoBanubaModule"]
+    "modules": ["ExpoBanubaModule"],
+    "reactDelegateHandlers": ["ExpoBanubaReactDelegateHandler"]
   },
   "android": {
     "modules": ["expo.modules.banuba.ExpoBanubaModule"]

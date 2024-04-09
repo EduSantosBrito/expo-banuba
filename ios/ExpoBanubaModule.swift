@@ -23,8 +23,9 @@ public class ExpoBanubaModule: Module {
         AsyncFunction("openVideoEditor") { (promise: Promise) in
         }.runOnQueue(.main)
         
-        View(ExpoBanubaDelegate.self){
-        }
+        AsyncFunction("closeAudioBrowser") { () in
+            delegate.closeAudioBrowser()
+        }.runOnQueue(.main)
     }
 }
 
@@ -35,6 +36,15 @@ class ExpoBanubaDelegate: ExpoView, BanubaVideoEditorDelegate {
   // Use “true” if you want users could restore the last video editing session.
   private let restoreLastVideoEditingSession: Bool = false
   private var inputPromise: Promise? = nil
+    
+  func closeAudioBrowser() {
+      guard let musicEditorFactory: ExpoBanubaReactDelegateHandler  = self.videoEditorModule?.viewControllerFactory.musicEditorFactory as? ExpoBanubaReactDelegateHandler else {
+          print("Failed to close audio browser")
+          return;
+      }
+      
+      musicEditorFactory.closeAudioBrowser()
+  }
 
   // MARK: - Handle BanubaVideoEditor callbacks
   func videoEditorDidCancel(_ videoEditor: BanubaVideoEditor) {
@@ -80,7 +90,7 @@ class ExpoBanubaDelegate: ExpoView, BanubaVideoEditorDelegate {
     guard let videoEditorSDK = videoEditorModule?.videoEditorSDK else {
       return
     }
-
+      
     videoEditorSDK.delegate = self
     videoEditorSDK.getLicenseState(completion: { [weak self] isValid in
       if isValid {
@@ -98,6 +108,7 @@ class ExpoBanubaDelegate: ExpoView, BanubaVideoEditorDelegate {
 extension ExpoBanubaDelegate {
   func exportVideo(videoEditor: BanubaVideoEditor, _ inputPromise: Promise?) {
     guard let videoEditorModule else { return }
+    // MARK: Abrir tela
     let progressViewController = videoEditorModule.createProgressViewController()
     progressViewController.cancelHandler = { videoEditor.stopExport() }
     guard let viewController = RCTPresentedViewController() else {

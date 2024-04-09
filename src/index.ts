@@ -6,7 +6,7 @@ type ExportedVideo = {
 };
 
 export async function initVideoEditor(
-  licenseKey: string,
+  licenseKey: string
 ): Promise<null | ExportedVideo> {
   const response = await ExpoBanubaModule.initVideoEditor(licenseKey);
   if (!response) {
@@ -17,4 +17,8 @@ export async function initVideoEditor(
 
 export async function openVideoEditor(): Promise<void> {
   return ExpoBanubaModule.openVideoEditor();
+}
+
+export async function closeAudioBrowser(): Promise<void> {
+  return ExpoBanubaModule.closeAudioBrowser();
 }
