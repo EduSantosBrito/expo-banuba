@@ -106,6 +106,27 @@ class ExpoBanubaDelegate: ExpoView, BanubaVideoEditorDelegate {
 
 // MARK: - Export example
 extension ExpoBanubaDelegate {
+    
+  func getDocumentDirectoryPath() -> NSString {
+    let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+    let documentsDirectory = paths[0]
+    return documentsDirectory as NSString
+  }
+    
+  func saveImageToDocumentsDirectory(image: UIImage, withName: String) -> String? {
+    if let data = image.pngData() {
+        let dirPath = getDocumentDirectoryPath()
+        let imageFileUrl = URL(fileURLWithPath: dirPath.appendingPathComponent(withName) as String)
+        do {
+            try data.write(to: imageFileUrl)
+            print("Successfully saved image at path: \(imageFileUrl)")
+            return imageFileUrl.absoluteString
+        } catch {
+            print("Error saving image: \(error)")
+        }
+    }
+    return nil
+  }
   func exportVideo(videoEditor: BanubaVideoEditor, _ inputPromise: Promise?) {
     guard let videoEditorModule else { return }
     // MARK: Abrir tela
@@ -143,7 +164,7 @@ extension ExpoBanubaDelegate {
               videoEditor.clearSessionData()
             }
             if error == nil {
-              let exportedVideo: ExportedVideo = ExportedVideo(video: videoURL.path, thumbnail: exportCoverImages?.gifFileUrl?.absoluteString)
+                let exportedVideo: ExportedVideo = ExportedVideo(video: videoURL.path, thumbnail: self?.saveImageToDocumentsDirectory(image: (exportCoverImages?.coverImage)!, withName: "connyct-thumbnail.png"))
               self?.inputPromise?.resolve(exportedVideo.toJSONString())
             }
           }
