@@ -15,7 +15,12 @@ import { basename, join, resolve } from "path";
 import copyFolderRecursiveSync from "./utils/copyFolderRecursiveSync";
 import { BanubaPluginProps } from "./withBanuba";
 
+const MUSIC_LIBRARY_USAGE =
+  "Allow $(PRODUCT_NAME) to access your music library";
 const MICROPHONE_USAGE = "Allow $(PRODUCT_NAME) to access your microphone";
+const CAMERA_USAGE = "Allow $(PRODUCT_NAME) to access your camera";
+const PHOTO_LIBRARY_USAGE =
+  "Allow $(PRODUCT_NAME) to access your photo library";
 
 const sources = `
 source 'https://github.com/Banuba/specs.git'
@@ -95,14 +100,15 @@ const withAssets = (config: ExpoConfig, assetsPath: string): ExpoConfig => {
 
 const withPermissions = (config: ExpoConfig): ExpoConfig => {
   return withInfoPlist(config, (modConfig) => {
+    modConfig.modResults.NSAppleMusicUsageDescription =
+      modConfig.modResults.NSAppleMusicUsageDescription || MUSIC_LIBRARY_USAGE;
     modConfig.modResults.NSMicrophoneUsageDescription =
       modConfig.modResults.NSMicrophoneUsageDescription || MICROPHONE_USAGE;
     modConfig.modResults.NSCameraUsageDescription =
-      modConfig.modResults.NSCameraUsageDescription ||
-      "Allow $(PRODUCT_NAME) to access your camera";
+      modConfig.modResults.NSCameraUsageDescription || CAMERA_USAGE;
     modConfig.modResults.NSPhotoLibraryUsageDescription =
       modConfig.modResults.NSPhotoLibraryUsageDescription ||
-      "Allow $(PRODUCT_NAME) to access your photo library";
+      PHOTO_LIBRARY_USAGE;
     return modConfig;
   });
 };
