@@ -16,8 +16,8 @@ public class ExpoBanubaModule: Module {
     public func definition() -> ModuleDefinition {
         Name("ExpoBanuba")
         
-        AsyncFunction("initVideoEditor") { (token: String, promise: Promise) in
-            delegate.openVideoEditorDefault(self, token, promise)
+        AsyncFunction("initVideoEditor") { (token: String, giphyApiKey: String, promise: Promise) in
+            delegate.openVideoEditorDefault(self, token, giphyApiKey, promise)
         }.runOnQueue(.main)
         
         AsyncFunction("openVideoEditor") { (promise: Promise) in
@@ -60,7 +60,7 @@ class ExpoBanubaDelegate: ExpoView, BanubaVideoEditorDelegate {
     }
   }
 
-  func openVideoEditorDefault(_ sender: Any, _ token: String, _ promise: Promise) {
+  func openVideoEditorDefault(_ sender: Any, _ token: String, _ giphyApiKey: String, _ promise: Promise) {
       let musicTrackPreset: MediaTrack? = nil
       self.inputPromise = promise
       // Uncomment to apply custom audio track in video editor
@@ -77,15 +77,15 @@ class ExpoBanubaDelegate: ExpoView, BanubaVideoEditorDelegate {
         musicTrack: musicTrackPreset, // Paste a music track as a track preset at the camera screen to record video with music
         animated: true
       )
-      checkLicenseAndOpenVideoEditor(with: launchConfig, token, promise)
+      checkLicenseAndOpenVideoEditor(with: launchConfig, token, giphyApiKey,  promise)
   }
   
-  private func checkLicenseAndOpenVideoEditor(with launchConfig: VideoEditorLaunchConfig, _ token: String, _ promise: Promise) {
+    private func checkLicenseAndOpenVideoEditor(with launchConfig: VideoEditorLaunchConfig, _ token: String, _ giphyApiKey: String, _ promise: Promise) {
     // Deallocate any active instances of both editors to free used resources
     // and to prevent "You are trying to create the second instance of the singleton." crash
     videoEditorModule = nil
     
-    videoEditorModule = VideoEditorModule(token: token)
+    videoEditorModule = VideoEditorModule(token: token, giphyApiKey: giphyApiKey)
     
     guard let videoEditorSDK = videoEditorModule?.videoEditorSDK else {
       return

@@ -16,6 +16,7 @@ export default function App() {
   const onPress = async () => {
     const response = await ExpoBanuba.initVideoEditor(
       process.env.EXPO_PUBLIC_BANUBA_KEY!,
+      process.env.EXPO_PUBLIC_GIPHY_KEY!,
     );
     if (!response && Platform.OS === "android") {
       ExpoBanuba.openVideoEditor().then(console.log).catch(console.log);

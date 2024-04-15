@@ -18,8 +18,8 @@ class VideoEditorModule {
     
     var isVideoEditorInitialized: Bool { videoEditorSDK != nil }
     
-    init(token: String) {
-        let config = createConfiguration()
+    init(token: String, giphyApiKey: String) {
+        let config = createConfiguration(giphyApiKey: giphyApiKey)
         
         let videoEditorSDK = BanubaVideoEditor(
             token: token,
@@ -64,8 +64,9 @@ class VideoEditorModule {
       return progressViewController
     }
     
-    func createConfiguration() -> VideoEditorConfig {
+    func createConfiguration(giphyApiKey: String) -> VideoEditorConfig {
         var config = VideoEditorConfig()
+        config.gifPickerConfiguration.giphyAPIKey = giphyApiKey
         
         config.setupColorsPalette(
             VideoEditorColorsPalette(

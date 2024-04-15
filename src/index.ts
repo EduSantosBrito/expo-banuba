@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 import ExpoBanubaModule from "./ExpoBanubaModule";
 
 type ExportedVideo = {
@@ -6,13 +8,18 @@ type ExportedVideo = {
 };
 
 export async function initVideoEditor(
-  licenseKey: string
+  licenseKey: string,
+  giphyApiKey: string,
 ): Promise<null | ExportedVideo> {
-  const response = await ExpoBanubaModule.initVideoEditor(licenseKey);
-  if (!response) {
-    return null;
+  if (Platform.OS === "ios") {
+    const response = await ExpoBanubaModule.initVideoEditor(
+      licenseKey,
+      giphyApiKey,
+    );
+    return JSON.parse(response) as ExportedVideo;
   }
-  return JSON.parse(response) as ExportedVideo;
+
+  return await ExpoBanubaModule.initVideoEditor(licenseKey);
 }
 
 export async function openVideoEditor(): Promise<void> {
