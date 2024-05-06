@@ -12,7 +12,7 @@ import ExpoModulesCore
 extension CountdownView: MusicEditorCountdownAnimatableView {}
 
 class VideoEditorModule {
-
+    
     var videoEditorSDK: BanubaVideoEditor?
     var viewControllerFactory = ViewControllerFactory()
     
@@ -43,30 +43,31 @@ class VideoEditorModule {
     
     func createExportConfiguration(destFile: URL) -> ExportConfiguration {
         let exportConfiguration = ExportVideoConfiguration(
-          fileURL: destFile,
-          quality: .auto,
-          useHEVCCodecIfPossible: true,
-          watermarkConfiguration: nil
+            fileURL: destFile,
+            quality: .auto,
+            useHEVCCodecIfPossible: true,
+            watermarkConfiguration: nil
         )
         
         let exportConfig = ExportConfiguration(
-          videoConfigurations: [exportConfiguration],
-          isCoverEnabled: true,
-          gifSettings: GifSettings(duration: 0.3)
+            videoConfigurations: [exportConfiguration],
+            isCoverEnabled: true,
+            gifSettings: GifSettings(duration: 0.3)
         )
         
         return exportConfig
     }
     
     func createProgressViewController() -> ProgressViewController {
-      let progressViewController = ProgressViewController.makeViewController()
-      progressViewController.message = "Exporting"
-      return progressViewController
+        let progressViewController = ProgressViewController.makeViewController()
+        progressViewController.message = "Exporting"
+        return progressViewController
     }
     
     func createConfiguration(giphyApiKey: String) -> VideoEditorConfig {
         var config = VideoEditorConfig()
         config.gifPickerConfiguration.giphyAPIKey = giphyApiKey
+        config.musicEditorConfiguration.mainMusicViewControllerConfig.tracksLimit = 1
         
         config.setupColorsPalette(
             VideoEditorColorsPalette(
@@ -95,36 +96,44 @@ class VideoEditorModule {
 }
 
 class AudioBrowserModule: UIViewController, TrackSelectionViewController, RCTBridgeModule {
-  weak var trackSelectionDelegate: TrackSelectionViewControllerDelegate?
+    weak var trackSelectionDelegate: TrackSelectionViewControllerDelegate?
     
-  static func moduleName() -> String! {
-    return "expo_banuba_audio_browser"
-  }
-
-  static func requiresMainQueueSetup() -> Bool {
-    return true
-  }
+    static func moduleName() -> String! {
+        return "expo_banuba_audio_browser"
+    }
     
-  func onClose() {
-    trackSelectionDelegate?.trackSelectionViewControllerDidCancel(viewController: self)
-  }
-
-  override func viewDidLoad() {
-      let bridge = RCTBridge.current()
-      self.view = RCTRootView(
-        bridge: bridge!,
-        moduleName: AudioBrowserModule.moduleName(),
-        initialProperties: nil
-      )
-  }
+    static func requiresMainQueueSetup() -> Bool {
+        return true
+    }
+    
+    func onClose() {
+        trackSelectionDelegate?.trackSelectionViewControllerDidCancel(viewController: self)
+    }
+    
+    func selectAudio(selectedAudio: SelectedAudio) {
+        let uuid = UUID();
+        DispatchQueue.main.async {
+            self.trackSelectionDelegate?.trackSelectionViewController(viewController: self, didSelectFile: selectedAudio.url, coverURL: nil, timeRange: nil, isEditable: true, title: selectedAudio.musicName, additionalTitle: selectedAudio.artistName, uuid: uuid)
+        }
+        print("Audio track is applied!")
+    }
+    
+    override func viewDidLoad() {
+        let bridge = RCTBridge.current()
+        self.view = RCTRootView(
+            bridge: bridge!,
+            moduleName: AudioBrowserModule.moduleName(),
+            initialProperties: nil
+        )
+    }
 }
 
 class ViewControllerFactory: ExternalViewControllerFactory {
-
-  // Override to use custom audio browser experience. Set nil to use default implementation
-  var musicEditorFactory: MusicEditorExternalViewControllerFactory? = ExpoBanubaReactDelegateHandler()
-
-  var countdownTimerViewFactory: CountdownTimerViewFactory?
-
-  var exposureViewFactory: AnimatableViewFactory?
+    
+    // Override to use custom audio browser experience. Set nil to use default implementation
+    var musicEditorFactory: MusicEditorExternalViewControllerFactory? = ExpoBanubaReactDelegateHandler()
+    
+    var countdownTimerViewFactory: CountdownTimerViewFactory?
+    
+    var exposureViewFactory: AnimatableViewFactory?
 }

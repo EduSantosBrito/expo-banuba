@@ -7,6 +7,10 @@ public class ExpoBanubaReactDelegateHandler: ExpoReactDelegateHandler, MusicEdit
     public func closeAudioBrowser () {
         audioBrowserModule?.onClose()
     }
+    
+    public func selectAudio(selectedAudio: SelectedAudio) {
+        audioBrowserModule?.selectAudio(selectedAudio: selectedAudio)
+    }
 
     // Audio Browser selection view controller
     public func makeTrackSelectionViewController(selectedAudioItem: AudioItem?) -> TrackSelectionViewController? {

@@ -9,9 +9,20 @@ export const AudioBrowser = () => {
     }
   };
 
+  const onSelectAudio = () => {
+    if (ExpoBanuba.selectAudio) {
+      ExpoBanuba.selectAudio(
+        "<< FULL PATH TO MP3 >>",
+        "Song name",
+        "Artist name",
+      );
+    }
+  };
+
   return (
     <SafeAreaView>
       <Text>Audio browser is working</Text>
+      <Button onPress={onSelectAudio} title="Select audio" />
       <Button onPress={onClose} title="Close" />
     </SafeAreaView>
   );

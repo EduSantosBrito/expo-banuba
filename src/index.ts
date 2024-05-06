@@ -29,3 +29,11 @@ export async function openVideoEditor(): Promise<void> {
 export async function closeAudioBrowser(): Promise<void> {
   return ExpoBanubaModule.closeAudioBrowser();
 }
+
+export async function selectAudio(
+  audioURL: string,
+  musicName: string,
+  artistName: string,
+): Promise<void> {
+  return ExpoBanubaModule.selectAudio(audioURL, musicName, artistName);
+}
