@@ -107,13 +107,19 @@ class AudioBrowserModule: UIViewController, TrackSelectionViewController, RCTBri
     }
     
     func onClose() {
-        trackSelectionDelegate?.trackSelectionViewControllerDidCancel(viewController: self)
+        DispatchQueue.main.async {
+            self.trackSelectionDelegate?.trackSelectionViewControllerDidCancel(viewController: self)
+        }
     }
     
     func selectAudio(selectedAudio: SelectedAudio) {
         let uuid = UUID();
+        let asset = AVURLAsset(url: selectedAudio.url);
         DispatchQueue.main.async {
-            self.trackSelectionDelegate?.trackSelectionViewController(viewController: self, didSelectFile: selectedAudio.url, coverURL: nil, timeRange: nil, isEditable: true, title: selectedAudio.musicName, additionalTitle: selectedAudio.artistName, uuid: uuid)
+            self.trackSelectionDelegate?.trackSelectionViewController(viewController: self, didSelectFile: selectedAudio.url, coverURL: nil, timeRange: CMTimeRange(
+                start: .zero,
+                duration: asset.duration
+            ), isEditable: true, title: selectedAudio.musicName, additionalTitle: selectedAudio.artistName, uuid: uuid)
         }
         print("Audio track is applied!")
     }

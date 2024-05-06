@@ -12,7 +12,7 @@ export const AudioBrowser = () => {
   const onSelectAudio = () => {
     if (ExpoBanuba.selectAudio) {
       ExpoBanuba.selectAudio(
-        "<< FULL PATH TO MP3 >>",
+        "<< FULL PATH TO M4A FILE >>",
         "Song name",
         "Artist name",
       );
